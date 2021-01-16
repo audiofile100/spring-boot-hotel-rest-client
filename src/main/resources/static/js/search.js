@@ -50,15 +50,17 @@ $(document).ready(function () {
 
         $.each($hotelContainer.children("#hotelRow"), function (index, hotel) {
 
-            // filter by price
             var thisHotelPrice = parseInt($(this).children("#priceDiv").children("#price").text());
+            var thisHotelAmenities = $(this).children("#hotelInfoDiv").children("#amenities").text();
+            var thisHotelRating = $(this).children("#hotelInfoDiv").children("#hiddenStar").text();
+            var flag = true;
+
+            // filter by price
             if (selectedPrice < thisHotelPrice) {
                 $(this).hide();
             }
 
             // filter by amenities
-            var thisHotelAmenities = $(this).children("#hotelInfoDiv").children("#amenities").text();
-            var flag = true;
             $.each(selectedAmenities, function (index, amenity) {
                 flag = thisHotelAmenities.includes($(this).val());
                 if (flag === false) return false;
@@ -68,7 +70,6 @@ $(document).ready(function () {
             }
 
             // filter by star rating
-            var thisHotelRating = $(this).children("#hotelInfoDiv").children("#hiddenStar").text();
             flag = false;
             $.each(selectedRatings, function (index, rating) {
                 flag = ($(this).val() === thisHotelRating);

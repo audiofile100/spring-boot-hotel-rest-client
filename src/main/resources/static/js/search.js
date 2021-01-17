@@ -16,17 +16,17 @@ $(document).ready(function () {
 
                 $.each(result, function(key1, value1) {
                     $hotelContainer.append("<div id='hotelRow' class='row my-2'>"
-                                            + "<div id='imgDiv' class='col-3'>"
+                                            + "<div class='col-3'>"
                                                 + "<img src='" + value1.imageURL + "' alt='hotel' width='200' height='200'>"
                                             + "</div>"
-                                            + "<div id='hotelInfoDiv' class='col-7 my-3'>"
+                                            + "<div class='col-7 my-3'>"
                                                 + "<h4>" + value1.hotelName + "</h4>"
                                                 + "<p id='hiddenStar' hidden>" + value1.starRating + "</p>"
                                                 + "<p>" + getStars(value1.starRating) + "</p>"
                                                 + "<p id='amenities' class='my-3 text-small'>" + getAmenities(value1.amenities) + "</p>"
                                                 + "<p class='mt-5'>" + value1.address + "</p>"
                                             + "</div>"
-                                            + "<div id='priceDiv' class='col-2 mt-3'>"
+                                            + "<div class='col-2 mt-3'>"
                                                 + "<h6 id='price'>" + value1.averagePrice + "</h6>"
                                             + "</div>"
                                         + "</div>");
@@ -50,9 +50,9 @@ $(document).ready(function () {
 
         $.each($hotelContainer.children("#hotelRow"), function (index, hotel) {
 
-            var thisHotelPrice = parseInt($(this).children("#priceDiv").children("#price").text());
-            var thisHotelAmenities = $(this).children("#hotelInfoDiv").children("#amenities").text();
-            var thisHotelRating = $(this).children("#hotelInfoDiv").children("#hiddenStar").text();
+            var thisHotelPrice = parseInt($(this).find("#price").text());
+            var thisHotelAmenities = $(this).find("#amenities").text();
+            var thisHotelRating = $(this).find("#hiddenStar").text();
             var flag = true;
 
             // filter by price

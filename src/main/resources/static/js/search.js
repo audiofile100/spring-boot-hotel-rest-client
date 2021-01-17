@@ -92,14 +92,10 @@ $(document).ready(function () {
     }
 
     function getStars(hotelRating) {
-        var stars = ["<span class='fa fa-star'></span>",
-            "<span class='fa fa-star'></span>",
-            "<span class='fa fa-star'></span>",
-            "<span class='fa fa-star'></span>",
-            "<span class='fa fa-star'></span>"
-        ];
-        for (var i = 0; i < hotelRating; i++) {
-            stars[i] = "<span class='fa fa-star checked'></span>";
+        const maxStars = 5;
+        var stars = [];
+        for (let i = 0; i < maxStars; i++) {
+            stars[i] = (i < hotelRating) ? "<span class='fa fa-star checked'></span>" : "<span class='fa fa-star'></span>";
         }
         return stars.join("");
     }

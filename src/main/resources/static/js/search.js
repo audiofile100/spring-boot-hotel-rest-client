@@ -20,6 +20,7 @@ $(document).ready(function () {
                                                 + "<img src='" + value1.imageURL + "' alt='hotel' width='200' height='200'>"
                                             + "</div>"
                                             + "<div class='col-7 my-3'>"
+                                                + "<p id='hotelId' hidden>" + value1.hotelId + "</p>"
                                                 + "<h4>" + value1.hotelName + "</h4>"
                                                 + "<p id='hiddenStar' hidden>" + value1.starRating + "</p>"
                                                 + "<p>" + getStars(value1.starRating) + "</p>"
@@ -28,6 +29,7 @@ $(document).ready(function () {
                                             + "</div>"
                                             + "<div class='col-2 mt-3'>"
                                                 + "<h6 id='price'>" + value1.averagePrice + "</h6>"
+                                                + "<input class='btn btn-info btn-lg bookBtn' type='button' value='book' data-hotel='" + value1.hotelName + "'>"
                                             + "</div>"
                                         + "</div>");
                 });
@@ -38,6 +40,23 @@ $(document).ready(function () {
             }
         });
 
+    });
+
+    $(document).on('click','.bookBtn', function() {
+        var hotelName = $(this).attr("data-hotel");
+        var numRooms = parseInt($("#noRooms").val());
+        var numGuests = parseInt($("#noGuests").val());
+        var checkIn = $("#checkInDate").val();
+        var checkout = $("#checkOutDate").val();
+
+        var $myModal = $("#myModal");
+        $myModal.modal("toggle");
+
+        $myModal.find("#modal_hotelName").val(hotelName);
+        $myModal.find("#modal_noGuests").val(numGuests);
+        $myModal.find("#modal_noRooms").val(numRooms);
+        $myModal.find("#modal_checkInDate").val(checkIn);
+        $myModal.find("#modal_checkOutDate").val(checkout);
     });
 
     $("#filterBtn").click(function () {

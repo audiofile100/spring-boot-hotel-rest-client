@@ -59,6 +59,7 @@ $(document).ready(function () {
                 console.log(result);
 
                 var $roomTypesSelect = $("#myModal").find("#select_roomTypes");
+                $roomTypesSelect.empty();
 
                 $.each(result, function(key1, value1) {
                     $roomTypesSelect.append(
@@ -81,6 +82,29 @@ $(document).ready(function () {
         $myModal.find("#modal_noRooms").val(numRooms);
         $myModal.find("#modal_checkInDate").val(checkIn);
         $myModal.find("#modal_checkOutDate").val(checkout);
+    });
+
+    $(document).on('click', '.addGuestBtn', function () {
+
+        var $myModal = $("#myModal");
+        $myModal.modal("toggle");
+
+        var numGuests = parseInt($("#modal_noGuests").val());
+        numGuests = !isNaN(numGuests) ? numGuests : 0;
+
+        var $guestModal = $("#guestModal");
+        $guestModal.modal("toggle");
+
+        var $guestModalForm = $("#guestModalForm");
+        $guestModalForm.empty();
+
+        for (let i = 0; i < numGuests; i++) {
+            $guestModalForm.append("<div class='row'>" +
+                                        "<div class='col'><input type='text' class='form-control mb-2' placeholder='Name'></div> " +
+                                        "<div class='col'><input type='text' class='form-control mb-2' placeholder='Age'></div>" +
+                                        "<div class='col'><input type='text' class='form-control mb-2' placeholder='Gender'></div>" +
+                                    "</div>");
+        }
     });
 
     $("#filterBtn").click(function () {

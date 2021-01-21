@@ -5,3 +5,12 @@
 .checked {
     color: gold;
 }
+
+.guest-modal-content {
+    height: 60vh;
+}
+
+.guest-modal-body {
+    max-height: 55vh;
+    overflow-y: scroll;
+}

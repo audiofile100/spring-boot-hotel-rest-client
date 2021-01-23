@@ -24,4 +24,5 @@ public class Hotel {
     private int timesBooked;
     private Set<HotelRoom> hotelRooms = new HashSet<>();
     private Set<String> hotelAmenityNames = new HashSet<>();
+
 }

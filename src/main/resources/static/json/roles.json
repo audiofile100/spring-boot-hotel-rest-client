@@ -1,0 +1,10 @@
+[
+  {
+    "rid": "1",
+    "role": "admin"
+  },
+  {
+    "rid": "2",
+    "role": "customer"
+  }
+]

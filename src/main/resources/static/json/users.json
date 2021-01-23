@@ -1,0 +1,24 @@
+[
+  {
+    "uid" : "1",
+    "username" : "admin",
+    "password" : "admin",
+    "roles" : [
+      {
+        "rid": "1",
+        "role": "admin"
+      }
+    ]
+  },
+  {
+    "uid" : "2",
+    "username" : "customer",
+    "password" : "customer",
+    "roles" : [
+      {
+        "rid": "2",
+        "role": "customer"
+      }
+    ]
+  }
+]

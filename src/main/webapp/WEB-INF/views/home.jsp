@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,6 +14,8 @@
     <h1>Welcome to Travel Gig</h1>
     <h2>Search your desired hotel</h2>
 </div>
+
+<input type="hidden" id="currentUser" name="currentUser" value="${currentUser}"/>
 
 <div class="container border rounded" style="margin:auto;padding:50px;margin-top:50px;margin-bottom:50px">
     <h3>Narrow your search results</h3>

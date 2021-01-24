@@ -49,39 +49,43 @@ $(document).ready(function () {
         var checkIn = $("#checkInDate").val();
         var checkout = $("#checkOutDate").val();
 
-        $.ajax({
-            type: "GET",
-            contentType: "application/json",
-            url: "/roomtype",
-            dataType: "json",
-            cache: false,
-            success: function(result) {
-                console.log(result);
+        if ($("#currentUser").val() === "anonymousUser") {
+            window.location.replace("http://localhost:8080/login");
+        } else {
+            $.ajax({
+                type: "GET",
+                contentType: "application/json",
+                url: "/roomtype",
+                dataType: "json",
+                cache: false,
+                success: function(result) {
+                    console.log(result);
 
-                var $roomTypesSelect = $("#myModal").find("#select_roomTypes");
-                $roomTypesSelect.empty();
+                    var $roomTypesSelect = $("#myModal").find("#select_roomTypes");
+                    $roomTypesSelect.empty();
 
-                $.each(result, function(key1, value1) {
-                    $roomTypesSelect.append(
-                        "<option value='" + value1.name + "'>" + value1.name + "</option>"
-                    );
-                });
+                    $.each(result, function(key1, value1) {
+                        $roomTypesSelect.append(
+                            "<option value='" + value1.name + "'>" + value1.name + "</option>"
+                        );
+                    });
 
-            },
-            error: function(e){
-                alert("Error!");
-                console.log("ERROR: ", e);
-            }
-        });
+                },
+                error: function(e){
+                    alert("Error!");
+                    console.log("ERROR: ", e);
+                }
+            });
 
-        var $myModal = $("#myModal");
-        $myModal.modal("toggle");
+            var $myModal = $("#myModal");
+            $myModal.modal("toggle");
 
-        $myModal.find("#modal_hotelName").val(hotelName);
-        $myModal.find("#modal_noGuests").val(numGuests);
-        $myModal.find("#modal_noRooms").val(numRooms);
-        $myModal.find("#modal_checkInDate").val(checkIn);
-        $myModal.find("#modal_checkOutDate").val(checkout);
+            $myModal.find("#modal_hotelName").val(hotelName);
+            $myModal.find("#modal_noGuests").val(numGuests);
+            $myModal.find("#modal_noRooms").val(numRooms);
+            $myModal.find("#modal_checkInDate").val(checkIn);
+            $myModal.find("#modal_checkOutDate").val(checkout);
+        }
     });
 
     $(document).on('click', '.addGuestBtn', function () {

@@ -7,7 +7,6 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +20,7 @@ public class LoginController {
     public String loginUser(@RequestParam(value = "logout", required = false) String logout,
                             @RequestParam(value = "error", required = false) String error, HttpServletRequest request,
                             HttpServletResponse response, Model model) {
-        log.debug("login form -------");
+
         String message = null;
 
         if (logout != null) {

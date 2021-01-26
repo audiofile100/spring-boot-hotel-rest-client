@@ -20,7 +20,7 @@ $(document).ready(function () {
                                                 + "<img src='" + value1.imageURL + "' alt='hotel' width='200' height='200'>"
                                             + "</div>"
                                             + "<div class='col-7 my-3'>"
-                                                + "<p id='hotelId' hidden>" + value1.hotelId + "</p>"
+                                                //+ "<p id='hotelId' hidden>" + value1.hotelId + "</p>"
                                                 + "<h4>" + value1.hotelName + "</h4>"
                                                 + "<p id='hiddenStar' hidden>" + value1.starRating + "</p>"
                                                 + "<p>" + getStars(value1.starRating) + "</p>"
@@ -29,7 +29,7 @@ $(document).ready(function () {
                                             + "</div>"
                                             + "<div class='col-2 mt-3'>"
                                                 + "<h6 id='price'>" + value1.averagePrice + "</h6>"
-                                                + "<input class='btn btn-info btn-lg bookBtn' type='button' value='book' data-hotel='" + value1.hotelName + "'>"
+                                                + "<input class='btn btn-info btn-lg bookBtn' type='button' value='book' data-id='" + value1.hotelId + "' data-hotel='" + value1.hotelName + "'>"
                                             + "</div>"
                                         + "</div>");
                 });
@@ -43,12 +43,6 @@ $(document).ready(function () {
     });
 
     $(document).on('click','.bookBtn', function() {
-        var hotelName = $(this).attr("data-hotel");
-        var numRooms = parseInt($("#noRooms").val());
-        var numGuests = parseInt($("#noGuests").val());
-        var checkIn = $("#checkInDate").val();
-        var checkout = $("#checkOutDate").val();
-
         if ($("#currentUser").val() === "anonymousUser") {
             window.location.replace("http://localhost:8080/login");
         } else {
@@ -78,13 +72,13 @@ $(document).ready(function () {
             });
 
             var $myModal = $("#myModal");
+            $myModal.find("#modal_hotelId").val($(this).attr("data-id"));
+            $myModal.find("#modal_hotelName").val($(this).attr("data-hotel"));
+            $myModal.find("#modal_noGuests").val(parseInt($("#noGuests").val()));
+            $myModal.find("#modal_noRooms").val(parseInt($("#noRooms").val()));
+            $myModal.find("#modal_checkInDate").val($("#checkInDate").val());
+            $myModal.find("#modal_checkOutDate").val($("#checkOutDate").val());
             $myModal.modal("toggle");
-
-            $myModal.find("#modal_hotelName").val(hotelName);
-            $myModal.find("#modal_noGuests").val(numGuests);
-            $myModal.find("#modal_noRooms").val(numRooms);
-            $myModal.find("#modal_checkInDate").val(checkIn);
-            $myModal.find("#modal_checkOutDate").val(checkout);
         }
     });
 
@@ -97,18 +91,62 @@ $(document).ready(function () {
         numGuests = !isNaN(numGuests) ? numGuests : 0;
 
         var $guestModal = $("#guestModal");
-        $guestModal.modal("toggle");
 
         var $guestModalForm = $("#guestModalForm");
         $guestModalForm.empty();
 
         for (let i = 0; i < numGuests; i++) {
-            $guestModalForm.append("<div class='row'>" +
-                                        "<div class='col'><input type='text' class='form-control mb-2' placeholder='Name'></div> " +
-                                        "<div class='col'><input type='text' class='form-control mb-2' placeholder='Age'></div>" +
-                                        "<div class='col'><input type='text' class='form-control mb-2' placeholder='Gender'></div>" +
+            $guestModalForm.append("<div class='row guestRow'>" +
+                                        "<div class='col'><input type='text' class='form-control mb-2 guestName' placeholder='Name'></div> " +
+                                        "<div class='col'><input type='text' class='form-control mb-2 guestAge' placeholder='Age'></div>" +
+                                        "<div class='col'><input type='text' class='form-control mb-2 guestGender' placeholder='Gender'></div>" +
                                     "</div>");
         }
+        $guestModal.modal("toggle");
+    });
+
+    $("#guestModalDone").click(function () {
+        var hotelName = $("#modal_hotelName").val();
+        var hotelId = $("#modal_hotelId").val();
+        var numRooms = parseInt($("#modal_noRooms").val());
+        var numGuests = parseInt($("#modal_noGuests").val());
+        var checkIn = $("#modal_checkInDate").val();
+        var checkout = $("#modal_checkOutDate").val();
+        var selectedRoomType = $("#select_roomTypes").val();
+
+        var booking = { "checkInDate" : checkIn,
+            "checkOutDate" : checkout,
+            "hotelId" : hotelId,
+            "totalRooms" : numRooms,
+            "totalGuests" : numGuests,
+            "roomType" : selectedRoomType
+        };
+
+        var guestList = [];
+        $(".guestRow").each(function () {
+            var obj = {};
+            obj.name = $(this).find(".guestName").val();
+            obj.age = $(this).find(".guestAge").val();
+            obj.gender = $(this).find(".guestGender").val();
+            guestList.push(obj);
+        });
+
+        booking.guestList = guestList;
+
+        $.ajax({
+            url: "/booking",
+            type: "POST",
+            data: JSON.stringify(booking),
+            contentType: "application/json",
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (err) {
+                alert("Error!");
+                console.log("ERROR: ", err);
+            }
+        });
     });
 
     $("#filterBtn").click(function () {

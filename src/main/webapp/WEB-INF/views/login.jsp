@@ -16,27 +16,29 @@
 </head>
 <body>
 
-    <div align="center" class="container">
-        <h3>Login Form</h3>
+    <div class="container">
+        <div class="col-md-4 mx-auto text-center">
+            <h3 class="my-5">Login Form</h3>
 
-        <form action="login" method="post">
-            <div class="input-group">
-                <input type="text" class="form-control" name="username" placeholder="username" />
-            </div>
-            <div class="input-group">
-                <input type="text" class="form-control" name="password" placeholder="password" />
-            </div>
-            <div class="input-group">
-                <div class="row">
-                    <div class="col">
-                        <input type="submit" class="btn btn-primary" value="Login" />
-                    </div>
-                    <div class="col">
-                        <a href="login?logout" class="btn btn-primary">Logout</a>
+            <form action="login" method="post">
+                <div class="input-group">
+                    <input type="text" class="form-control my-5" name="username" placeholder="username" />
+                </div>
+                <div class="input-group">
+                    <input type="text" class="form-control" name="password" placeholder="password" />
+                </div>
+                <div class="input-group">
+                    <div class="row">
+                        <div class="col">
+                            <input type="submit" class="btn btn-primary mt-5" value="Login" />
+                        </div>
+                        <div class="col">
+                            <a href="login?logout" class="btn btn-primary mt-5">Logout</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

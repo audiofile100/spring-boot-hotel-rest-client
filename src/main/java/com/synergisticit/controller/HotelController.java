@@ -22,4 +22,10 @@ public class HotelController {
 
         return new ResponseEntity<>(hotelRestClient.findBySearch(search), HttpStatus.OK);
     }
+
+    @GetMapping(value = "/hotelById", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> findHotelById(@RequestParam int id) {
+
+        return new ResponseEntity<>(hotelRestClient.findById(id), HttpStatus.OK);
+    }
 }

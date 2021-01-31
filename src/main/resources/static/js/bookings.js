@@ -17,21 +17,55 @@ $(document).ready(function () {
     });
 
     $(document).on('click', '.reviewBtn', function () {
-       var $reviewModal = $("#reviewModal");
-       $reviewModal.find("#modal_bookingId").val($(this).attr("data-bookingId"));
+        var $reviewModal = $("#reviewModal");
+        $reviewModal.find("#reviewModal_bookingId").val($(this).attr("data-bookingId"));
+        $reviewModal.find("#reviewModal_hotelId").val($(this).attr("data-hotelId"));
+        $reviewModal.find("#reviewModal_cid").val($(this).attr("data-cid"));
 
-       var $reviewModalBody = $reviewModal.find("#reviewModalBody");
-       $reviewModalBody.empty();
+        var $reviewModalBody = $reviewModal.find("#reviewModalBody");
+        $reviewModalBody.empty();
 
-       $reviewModalBody.append(rateCleanliness() + rateService() + rateProperty() + rateAmenities() + rateAtmosphere());
+        $reviewModalBody.append(rateCleanliness() + rateService() + rateProperty() + rateAmenities() + rateAtmosphere());
 
-       $reviewModal.modal("toggle");
+        $reviewModal.modal("toggle");
     });
 
     $("#saveReview").click(function () {
         $("#reviewModal").modal("toggle");
 
+        var cleanlinessRating = $("input:radio[name=cleanlinessOptions]:checked").val();
+        var serviceRating = $("input:radio[name=serviceOptions]:checked").val();
+        var propertyRating = $("input:radio[name=propertyOptions]:checked").val();
+        var amenitiesRating = $("input:radio[name=amenitiesOptions]:checked").val();
+        var atmosphereRating = $("input:radio[name=atmosphereOptions]:checked").val();
+        var overallRating = (parseInt(cleanlinessRating) + parseInt(serviceRating) + parseInt(propertyRating) + parseInt(amenitiesRating) + parseInt(atmosphereRating)) / 5;
 
+        var review = {
+            "cid" : $("#reviewModal_cid").val(),
+            "bookingId" : $("#reviewModal_bookingId").val(),
+            "hotelId" : $("#reviewModal_hotelId").val(),
+            "cleanliness" : cleanlinessRating,
+            "service" : serviceRating,
+            "property" : propertyRating,
+            "amenities" : amenitiesRating,
+            "atmosphere" : atmosphereRating,
+            "overall" : overallRating,
+            "comments" : ""
+        }
+
+        $.ajax({
+            url: "/hotelreview",
+            type: "POST",
+            data: JSON.stringify(review),
+            contentType: "application/json",
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (err) {
+                console.log("Error: " + err);
+            }
+        });
     });
 });
 
@@ -93,7 +127,7 @@ function bookingRow(val) {
         + "</div>"
         + "<div class='col-2'>"
         + "<input class='btn btn-primary cancelBtn' type='button' data-bookingId='" + val.bookingId + "' value='Cancel'/>"
-        + "<input class='btn btn-primary reviewBtn' type='button' data-bookingId='" + val.bookingId + "' value='Add Review'/>"
+        + "<input class='btn btn-primary reviewBtn' type='button' data-bookingId='" + val.bookingId + "' data-hotelId='" + val.hotelId + "' data-cid='" + val.cid + "' value='Add Review'/>"
         + "</div>"
         + "</div>"
         + "</div>"
@@ -105,19 +139,22 @@ function rateCleanliness() {
         "<div class='col'>Cleanliness</div>" +
         "<div class='col'>" +
         "<div class='form-check form-check-inline'>" +
-        "<input class='form-check-input' type='radio' name='cleanlinessOptions' id='cleanliness1'>" +
+        "<input class='form-check-input' type='radio' name='cleanlinessOptions' value='0' checked hidden>" +
         "</div>" +
         "<div class='form-check form-check-inline'>" +
-        "<input class='form-check-input' type='radio' name='cleanlinessOptions' id='cleanliness2'>" +
+        "<input class='form-check-input' type='radio' name='cleanlinessOptions' value='1'>" +
         "</div>" +
         "<div class='form-check form-check-inline'>" +
-        "<input class='form-check-input' type='radio' name='cleanlinessOptions' id='cleanliness3'>" +
+        "<input class='form-check-input' type='radio' name='cleanlinessOptions' value='2'>" +
         "</div>" +
         "<div class='form-check form-check-inline'>" +
-        "<input class='form-check-input' type='radio' name='cleanlinessOptions' id='cleanliness4'>" +
+        "<input class='form-check-input' type='radio' name='cleanlinessOptions' value='3'>" +
         "</div>" +
         "<div class='form-check form-check-inline'>" +
-        "<input class='form-check-input' type='radio' name='cleanlinessOptions' id='cleanliness5'>" +
+        "<input class='form-check-input' type='radio' name='cleanlinessOptions' value='4'>" +
+        "</div>" +
+        "<div class='form-check form-check-inline'>" +
+        "<input class='form-check-input' type='radio' name='cleanlinessOptions' value='5'>" +
         "</div>" +
         "</div>" +
         "</div>";
@@ -128,19 +165,22 @@ function rateService() {
         "<div class='col'>Service</div>" +
         "<div class='col'>" +
         "<div class='form-check form-check-inline'>" +
-        "<input class='form-check-input' type='radio' name='serviceOptions' id='service1'>" +
+        "<input class='form-check-input' type='radio' name='serviceOptions' value='0' checked hidden>" +
         "</div>" +
         "<div class='form-check form-check-inline'>" +
-        "<input class='form-check-input' type='radio' name='serviceOptions' id='service2'>" +
+        "<input class='form-check-input' type='radio' name='serviceOptions' value='1'>" +
         "</div>" +
         "<div class='form-check form-check-inline'>" +
-        "<input class='form-check-input' type='radio' name='serviceOptions' id='service3'>" +
+        "<input class='form-check-input' type='radio' name='serviceOptions' value='2'>" +
         "</div>" +
         "<div class='form-check form-check-inline'>" +
-        "<input class='form-check-input' type='radio' name='serviceOptions' id='service4'>" +
+        "<input class='form-check-input' type='radio' name='serviceOptions' value='3'>" +
         "</div>" +
         "<div class='form-check form-check-inline'>" +
-        "<input class='form-check-input' type='radio' name='serviceOptions' id='service5'>" +
+        "<input class='form-check-input' type='radio' name='serviceOptions' value='4'>" +
+        "</div>" +
+        "<div class='form-check form-check-inline'>" +
+        "<input class='form-check-input' type='radio' name='serviceOptions' value='5'>" +
         "</div>" +
         "</div>" +
         "</div>";
@@ -151,19 +191,22 @@ function rateProperty() {
         "<div class='col'>Property</div>" +
         "<div class='col'>" +
         "<div class='form-check form-check-inline'>" +
-        "<input class='form-check-input' type='radio' name='propertyOptions' id='property1'>" +
+        "<input class='form-check-input' type='radio' name='propertyOptions' value='0' checked hidden>" +
         "</div>" +
         "<div class='form-check form-check-inline'>" +
-        "<input class='form-check-input' type='radio' name='propertyOptions' id='property2'>" +
+        "<input class='form-check-input' type='radio' name='propertyOptions' value='1'>" +
         "</div>" +
         "<div class='form-check form-check-inline'>" +
-        "<input class='form-check-input' type='radio' name='propertyOptions' id='property3'>" +
+        "<input class='form-check-input' type='radio' name='propertyOptions' value='2'>" +
         "</div>" +
         "<div class='form-check form-check-inline'>" +
-        "<input class='form-check-input' type='radio' name='propertyOptions' id='property4'>" +
+        "<input class='form-check-input' type='radio' name='propertyOptions' value='3'>" +
         "</div>" +
         "<div class='form-check form-check-inline'>" +
-        "<input class='form-check-input' type='radio' name='propertyOptions' id='property5'>" +
+        "<input class='form-check-input' type='radio' name='propertyOptions' value='4'>" +
+        "</div>" +
+        "<div class='form-check form-check-inline'>" +
+        "<input class='form-check-input' type='radio' name='propertyOptions' value='5'>" +
         "</div>" +
         "</div>" +
         "</div>";
@@ -174,19 +217,22 @@ function rateAmenities() {
         "<div class='col'>Amenities</div>" +
         "<div class='col'>" +
         "<div class='form-check form-check-inline'>" +
-        "<input class='form-check-input' type='radio' name='amenitiesOptions' id='amenities1'>" +
+        "<input class='form-check-input' type='radio' name='amenitiesOptions' value='0' checked hidden>" +
         "</div>" +
         "<div class='form-check form-check-inline'>" +
-        "<input class='form-check-input' type='radio' name='amenitiesOptions' id='amenities2'>" +
+        "<input class='form-check-input' type='radio' name='amenitiesOptions' value='1'>" +
         "</div>" +
         "<div class='form-check form-check-inline'>" +
-        "<input class='form-check-input' type='radio' name='amenitiesOptions' id='amenities3'>" +
+        "<input class='form-check-input' type='radio' name='amenitiesOptions' value='2'>" +
         "</div>" +
         "<div class='form-check form-check-inline'>" +
-        "<input class='form-check-input' type='radio' name='amenitiesOptions' id='amenities4'>" +
+        "<input class='form-check-input' type='radio' name='amenitiesOptions' value='3'>" +
         "</div>" +
         "<div class='form-check form-check-inline'>" +
-        "<input class='form-check-input' type='radio' name='amenitiesOptions' id='amenities5'>" +
+        "<input class='form-check-input' type='radio' name='amenitiesOptions' value='4'>" +
+        "</div>" +
+        "<div class='form-check form-check-inline'>" +
+        "<input class='form-check-input' type='radio' name='amenitiesOptions' value='5'>" +
         "</div>" +
         "</div>" +
         "</div>";
@@ -197,19 +243,22 @@ function rateAtmosphere() {
         "<div class='col'>Atmosphere</div>" +
         "<div class='col'>" +
         "<div class='form-check form-check-inline'>" +
-        "<input class='form-check-input' type='radio' name='atmosphereOptions' id='atmosphere1'>" +
+        "<input class='form-check-input' type='radio' name='atmosphereOptions' value='0' checked hidden>" +
         "</div>" +
         "<div class='form-check form-check-inline'>" +
-        "<input class='form-check-input' type='radio' name='atmosphereOptions' id='atmosphere2'>" +
+        "<input class='form-check-input' type='radio' name='atmosphereOptions' value='1'>" +
         "</div>" +
         "<div class='form-check form-check-inline'>" +
-        "<input class='form-check-input' type='radio' name='atmosphereOptions' id='atmosphere3'>" +
+        "<input class='form-check-input' type='radio' name='atmosphereOptions' value='2'>" +
         "</div>" +
         "<div class='form-check form-check-inline'>" +
-        "<input class='form-check-input' type='radio' name='atmosphereOptions' id='atmosphere4'>" +
+        "<input class='form-check-input' type='radio' name='atmosphereOptions' value='3'>" +
         "</div>" +
         "<div class='form-check form-check-inline'>" +
-        "<input class='form-check-input' type='radio' name='atmosphereOptions' id='atmosphere5'>" +
+        "<input class='form-check-input' type='radio' name='atmosphereOptions' value='4'>" +
+        "</div>" +
+        "<div class='form-check form-check-inline'>" +
+        "<input class='form-check-input' type='radio' name='atmosphereOptions' value='5'>" +
         "</div>" +
         "</div>" +
         "</div>";

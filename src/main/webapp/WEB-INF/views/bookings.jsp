@@ -46,7 +46,9 @@
 </div>
 
 <div class="modal" id="reviewModal">
-    <input class="form-control" type="hidden" id="modal_bookingId"/>
+    <input class="form-control" type="hidden" id="reviewModal_bookingId"/>
+    <input class="form-control" type="hidden" id="reviewModal_hotelId"/>
+    <input class="form-control" type="hidden" id="reviewModal_cid"/>
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
 

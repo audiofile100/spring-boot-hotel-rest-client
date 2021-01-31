@@ -3,8 +3,10 @@ package com.synergisticit.utilities;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.synergisticit.integration.dto.Customer;
 import com.synergisticit.integration.dto.Role;
 import com.synergisticit.integration.dto.User;
+import com.synergisticit.service.CustomerService;
 import com.synergisticit.service.RoleService;
 import com.synergisticit.service.UserService;
 import org.springframework.boot.CommandLineRunner;
@@ -25,11 +27,13 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
     private final ResourceLoader resourceLoader;
     private final UserService userService;
     private final RoleService roleService;
+    private final CustomerService customerService;
 
-    public CommandLineRunnerImpl(ResourceLoader resourceLoader, UserService userService, RoleService roleService) {
+    public CommandLineRunnerImpl(ResourceLoader resourceLoader, UserService userService, RoleService roleService, CustomerService customerService) {
         this.resourceLoader = resourceLoader;
         this.userService = userService;
         this.roleService = roleService;
+        this.customerService = customerService;
     }
 
     @Override
@@ -37,6 +41,7 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
 
         loadData("classpath:static/json/roles.json", "roles");
         loadData("classpath:static/json/users.json", "users");
+        loadData("classpath:static/json/customers.json", "customers");
     }
 
     private void loadData(String path, String entity) throws Exception {
@@ -69,6 +74,15 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
 
                     for (User u : users)
                         userService.save(u);
+                    break;
+
+                case "customers":
+                    gson = new Gson();
+                    listType = new TypeToken<List<Customer>>() {}.getType();
+                    List<Customer> customers = gson.fromJson(data, listType);
+
+                    for (Customer c : customers)
+                        customerService.save(c);
                     break;
             }
         } catch (IOException e) {

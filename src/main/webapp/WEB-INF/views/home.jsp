@@ -10,32 +10,44 @@
 
 </head>
 <body>
-<div class="container" style="margin-left:100px">
-    <h1>Welcome to Travel Gig</h1>
-    <h2>Search your desired hotel</h2>
+<div class="container text-center">
+    <h1 class="mt-5">Welcome to Travel Gig</h1>
+    <h2 class="mb-3">Search your desired hotel</h2>
 </div>
 
 <input type="hidden" id="currentUser" name="currentUser" value="${currentUser}"/>
+<input type="hidden" id="cid" name="cid" value="${cid}"/>
 
-<div class="container border rounded" style="margin:auto;padding:50px;margin-top:50px;margin-bottom:50px">
-    <h3>Narrow your search results</h3>
-    <div class="form-row">
-        <div class="col-3">
-            Hotel/City/State/Address <input class="form-control" type="text" id="searchLocation" name="searchLocation"/>
+<div class="row">
+    <div class="col-2 border rounded" style="margin-left:50px;padding:25px">
+        <div class="container" id="account">
+            <p>My Account</p>
+            <p><a href="account" class="btn btn-primary">My Bookings</a></p>
+            <p><a href="login?logout" class="btn btn-primary">Logout</a></p>
         </div>
-        <div class="col-2">
-            No. Rooms: <input class="form-control" type="number" id="noRooms" name="noRooms"/>
+    </div>
+    <div class="col-7">
+        <div class="container border rounded" style="margin:auto;padding:50px;margin-top:50px;margin-bottom:50px;margin-left:50px;">
+            <h3>Narrow your search results</h3>
+            <div class="form-row">
+                <div class="col-3">
+                    Hotel/City/State/Address <input class="form-control" type="text" id="searchLocation" name="searchLocation"/>
+                </div>
+                <div class="col-2">
+                    No. Rooms: <input class="form-control" type="number" id="noRooms" name="noRooms"/>
+                </div>
+                <div class="col-2">
+                    No. Guests: <input class="form-control" type="number" id="noGuests" name="noGuests"/>
+                </div>
+                <div class="col">
+                    Check-In Date: <input type="date" id="checkInDate" name="checkInDate"/>
+                </div>
+                <div class="col">
+                    Check-Out Date: <input type="date" id="checkOutDate" name="checkOutDate"/>
+                </div>
+                <input class="btn-sm btn-primary" type="button" id="searchBtn" value="SEARCH"/>
+            </div>
         </div>
-        <div class="col-2">
-            No. Guests: <input class="form-control" type="number" id="noGuests" name="noGuests"/>
-        </div>
-        <div class="col">
-            Check-In Date: <input type="date" id="checkInDate" name="checkInDate"/>
-        </div>
-        <div class="col">
-            Check-Out Date: <input type="date" id="checkOutDate" name="checkOutDate"/>
-        </div>
-        <input class="btn-sm btn-primary" type="button" id="searchBtn" value="SEARCH"/>
     </div>
 </div>
 
@@ -43,16 +55,6 @@
     <div class="col-2 border rounded" style="margin-left:50px;padding:25px">
 
         <br>
-        <!--  Star Rating:
-        <select class="form-control" id="filter_starRating">
-            <option value=0>Select</option>
-            <option value=1>1</option>
-            <option value=2>2</option>
-            <option value=3>3</option>
-            <option value=4>4</option>
-            <option value=5>5</option>
-        </select><br>-->
-
         Star Rating:<br>
         <div class="form-check-inline">
             <label class="form-check-label">
@@ -133,6 +135,8 @@
             <div class="modal-body">
                 <div class="col">
                     <input class="form-control" type="hidden" id="modal_hotelId"/>
+                    <input class="form-control" type="hidden" id="modal-hotelImg"/>
+                    <input class="form-control" type="hidden" id="modal_hotelPrice" />
                     Hotel Name: <input readonly="true" class="form-control" type="text" id="modal_hotelName"/>
                     No. Guests: <input class="form-control" type="number" id="modal_noGuests"/>
                     Check-In Date: <input class="form-control" type="date" id="modal_checkInDate"/>

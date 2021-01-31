@@ -35,6 +35,9 @@
                         <div class="col">
                             <a href="login?logout" class="btn btn-primary mt-5">Logout</a>
                         </div>
+                        <div class="col">
+                            <a href="home" class="btn btn-primary mt-5">Home</a>
+                        </div>
                     </div>
                 </div>
             </form>

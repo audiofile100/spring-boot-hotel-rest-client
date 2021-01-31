@@ -1,4 +1,11 @@
 $(document).ready(function () {
+    if ($("#currentUser").val() === "anonymousUser") {
+        $("#account").hide();
+    } else {
+        $("#account").show();
+        localStorage.setItem("cid", $("#cid").val());
+    }
+
     $("#searchBtn").click(function () {
         var search = $("#searchLocation").val();
 
@@ -20,7 +27,6 @@ $(document).ready(function () {
                                                 + "<img src='" + value1.imageURL + "' alt='hotel' width='200' height='200'>"
                                             + "</div>"
                                             + "<div class='col-7 my-3'>"
-                                                //+ "<p id='hotelId' hidden>" + value1.hotelId + "</p>"
                                                 + "<h4>" + value1.hotelName + "</h4>"
                                                 + "<p id='hiddenStar' hidden>" + value1.starRating + "</p>"
                                                 + "<p>" + getStars(value1.starRating) + "</p>"
@@ -29,7 +35,9 @@ $(document).ready(function () {
                                             + "</div>"
                                             + "<div class='col-2 mt-3'>"
                                                 + "<h6 id='price'>" + value1.averagePrice + "</h6>"
-                                                + "<input class='btn btn-info btn-lg bookBtn' type='button' value='book' data-id='" + value1.hotelId + "' data-hotel='" + value1.hotelName + "'>"
+                                                + "<input class='btn btn-info btn-lg bookBtn' " +
+                                                            "type='button' value='book' " +
+                                                            "data-id='" + value1.hotelId + "' data-hotel='" + value1.hotelName + "' data-hotelImg='" + value1.imageURL + "' data-hotelPrice='" + value1.averagePrice + "' />"
                                             + "</div>"
                                         + "</div>");
                 });
@@ -74,6 +82,7 @@ $(document).ready(function () {
             var $myModal = $("#myModal");
             $myModal.find("#modal_hotelId").val($(this).attr("data-id"));
             $myModal.find("#modal_hotelName").val($(this).attr("data-hotel"));
+            $myModal.find("#modal-hotelImg").val($(this).attr("data-hotelImg"));
             $myModal.find("#modal_noGuests").val(parseInt($("#noGuests").val()));
             $myModal.find("#modal_noRooms").val(parseInt($("#noRooms").val()));
             $myModal.find("#modal_checkInDate").val($("#checkInDate").val());
@@ -106,22 +115,22 @@ $(document).ready(function () {
     });
 
     $("#guestModalDone").click(function () {
-        var hotelName = $("#modal_hotelName").val();
-        var hotelId = $("#modal_hotelId").val();
-        var numRooms = parseInt($("#modal_noRooms").val());
-        var numGuests = parseInt($("#modal_noGuests").val());
-        var checkIn = $("#modal_checkInDate").val();
-        var checkout = $("#modal_checkOutDate").val();
-        var selectedRoomType = $("#select_roomTypes").val();
 
-        var booking = { "checkInDate" : checkIn,
-            "checkOutDate" : checkout,
-            "hotelId" : hotelId,
-            "totalRooms" : numRooms,
-            "totalGuests" : numGuests,
-            "roomType" : selectedRoomType
+        var booking = {
+            "cid" : $("#cid").val(),
+            "checkInDate" : $("#modal_checkInDate").val(),
+            "checkOutDate" : $("#modal_checkOutDate").val(),
+            "hotelId" : $("#modal_hotelId").val(),
+            "hotelName" : $("#modal_hotelName").val(),
+            "hotelImgUrl" : $("#modal-hotelImg").val(),
+            "totalRooms" : parseInt($("#modal_noRooms").val()),
+            "totalGuests" : parseInt($("#modal_noGuests").val()),
+            "roomType" : $("#select_roomTypes").val(),
+            "roomPrice" : parseFloat($("#modal_hotelPrice").val()),
+            "status" : "upcoming"
         };
 
+        // save all guest info
         var guestList = [];
         $(".guestRow").each(function () {
             var obj = {};
@@ -130,9 +139,9 @@ $(document).ready(function () {
             obj.gender = $(this).find(".guestGender").val();
             guestList.push(obj);
         });
-
         booking.guestList = guestList;
 
+        //save the booking
         $.ajax({
             url: "/booking",
             type: "POST",

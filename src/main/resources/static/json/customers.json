@@ -1,0 +1,20 @@
+[
+  {
+    "cid" : "1",
+    "name" : "dinesh",
+    "mobile" : "123-456-7890",
+    "email" : "dinesh@dinesh.com",
+    "user" : {
+      "uid" : "1"
+    }
+  },
+  {
+    "cid" : "2",
+    "name" : "mousumi",
+    "mobile" : "123-456-7890",
+    "email" : "mousumi@mousumi.com",
+    "user" : {
+      "uid" : "2"
+    }
+  }
+]

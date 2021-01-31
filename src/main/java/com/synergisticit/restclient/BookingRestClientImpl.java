@@ -1,10 +1,15 @@
 package com.synergisticit.restclient;
 
 import com.synergisticit.integration.dto.Booking;
+import com.synergisticit.integration.dto.Hotel;
 import com.synergisticit.utilities.RestClientUtilities;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 @Component
 public class BookingRestClientImpl implements BookingRestClient {
@@ -25,5 +30,17 @@ public class BookingRestClientImpl implements BookingRestClient {
         HttpEntity<Booking> requestBody = new HttpEntity<>(booking, util.getJsonHeaders());
 
         return restTemplate.postForObject(BOOKING_URL, requestBody, Booking.class);
+    }
+
+    @Override
+    public List<Booking> findAllByCid(int cid) {
+
+        return Arrays.asList(Objects.requireNonNull(restTemplate.getForObject(BOOKING_URL + cid, Booking[].class)));
+    }
+
+    @Override
+    public void cancelBooking(int bookingId) {
+
+        restTemplate.put(BOOKING_URL + bookingId, Booking.class);
     }
 }

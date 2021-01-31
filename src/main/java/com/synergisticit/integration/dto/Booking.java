@@ -10,10 +10,13 @@ import java.util.List;
 public class Booking {
 
     private int bookingId;
+    private int cid;
     private String customerMobile;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
     private int hotelId;
+    private String hotelName;
+    private String hotelImgUrl;
     private String roomType;
     private double roomPrice;
     private double discount;

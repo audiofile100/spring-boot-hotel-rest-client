@@ -26,12 +26,15 @@ $(document).ready(function () {
                                             + "<div class='col-3'>"
                                                 + "<img src='" + value1.imageURL + "' alt='hotel' width='200' height='200'>"
                                             + "</div>"
-                                            + "<div class='col-7 my-3'>"
+                                            + "<div class='col-5 my-3'>"
                                                 + "<h4>" + value1.hotelName + "</h4>"
                                                 + "<p id='hiddenStar' hidden>" + value1.starRating + "</p>"
                                                 + "<p>" + getStars(value1.starRating) + "</p>"
                                                 + "<p id='amenities' class='my-3 text-small'>" + getAmenities(value1.amenities) + "</p>"
                                                 + "<p class='mt-5'>" + value1.address + "</p>"
+                                            + "</div>"
+                                            + "<div class='col-2 mt-3'>"
+                                                + "<a class='hotelReviews' data-hid='" + value1.hotelId + "'>Reviews</a>"
                                             + "</div>"
                                             + "<div class='col-2 mt-3'>"
                                                 + "<h6 id='price'>" + value1.averagePrice + "</h6>"
@@ -50,6 +53,34 @@ $(document).ready(function () {
 
     });
 
+    $(document).on('click', '.hotelReviews', function () {
+
+        var $hotelReviewsModal = $("#hotelReviewsModal");
+
+        $.ajax({
+            url: "/hotelreview/" + $(this).attr("data-hid"),
+            type: "GET",
+            contentType: "application/json",
+            dataType: "json",
+            cache: false,
+            success: function (result) {
+                console.log(result);
+
+                var $reviewsBody = $("#hotelReviewsModalBody");
+                $reviewsBody.empty();
+
+                $.each(result, function (key, val) {
+                    $reviewsBody.append(reviewCard(val));
+                });
+            },
+            error: function (err) {
+                console.log("Error: " + err);
+            }
+        });
+
+        $hotelReviewsModal.modal("toggle");
+    });
+
     $(document).on('click','.bookBtn', function() {
         if ($("#currentUser").val() === "anonymousUser") {
             window.location.replace("http://localhost:8080/login");
@@ -57,7 +88,7 @@ $(document).ready(function () {
             $.ajax({
                 type: "GET",
                 contentType: "application/json",
-                url: "/roomtype",
+                url: "/hotelrooms/" + $(this).attr("data-id"),
                 dataType: "json",
                 cache: false,
                 success: function(result) {
@@ -67,9 +98,12 @@ $(document).ready(function () {
                     $roomTypesSelect.empty();
 
                     $.each(result, function(key1, value1) {
-                        $roomTypesSelect.append(
-                            "<option value='" + value1.name + "'>" + value1.name + "</option>"
-                        );
+                        console.log(value1);
+                        if (value1.noRooms > 0) {
+                            $roomTypesSelect.append(
+                                "<option value='" + value1.type.typeId + "' data-rooms='" + value1.noRooms + "'>" + value1.type.name + "</option>"
+                            );
+                        }
                     });
 
                 },
@@ -94,24 +128,33 @@ $(document).ready(function () {
     $(document).on('click', '.addGuestBtn', function () {
 
         var $myModal = $("#myModal");
-        $myModal.modal("toggle");
 
-        var numGuests = parseInt($("#modal_noGuests").val());
-        numGuests = !isNaN(numGuests) ? numGuests : 0;
+        var $roomsAvailable = $("#select_roomTypes").find(":selected").attr("data-rooms");
+        var $roomsRequested = $("#modal_noRooms").val();
 
-        var $guestModal = $("#guestModal");
+        if ($roomsRequested <= $roomsAvailable) {
+            $myModal.modal("toggle");
 
-        var $guestModalForm = $("#guestModalForm");
-        $guestModalForm.empty();
+            var numGuests = parseInt($("#modal_noGuests").val());
+            numGuests = !isNaN(numGuests) ? numGuests : 1;
 
-        for (let i = 0; i < numGuests; i++) {
-            $guestModalForm.append("<div class='row guestRow'>" +
-                                        "<div class='col'><input type='text' class='form-control mb-2 guestName' placeholder='Name'></div> " +
-                                        "<div class='col'><input type='text' class='form-control mb-2 guestAge' placeholder='Age'></div>" +
-                                        "<div class='col'><input type='text' class='form-control mb-2 guestGender' placeholder='Gender'></div>" +
-                                    "</div>");
+            var $guestModal = $("#guestModal");
+
+            var $guestModalForm = $("#guestModalForm");
+            $guestModalForm.empty();
+
+            for (let i = 0; i < numGuests; i++) {
+                $guestModalForm.append("<div class='row guestRow'>" +
+                    "<div class='col'><input type='text' class='form-control mb-2 guestName' placeholder='Name'></div> " +
+                    "<div class='col'><input type='text' class='form-control mb-2 guestAge' placeholder='Age'></div>" +
+                    "<div class='col'><input type='text' class='form-control mb-2 guestGender' placeholder='Gender'></div>" +
+                    "</div>");
+            }
+            $guestModal.modal("toggle");
+        } else {
+            alert("not enough rooms available");
         }
-        $guestModal.modal("toggle");
+
     });
 
     $("#guestModalDone").click(function () {
@@ -150,6 +193,20 @@ $(document).ready(function () {
             dataType: "json",
             success: function (data) {
                 console.log(data);
+
+                $.ajax({
+                    url: "/hotelrooms/remove/" + $("#modal_hotelId").val() + "/" +  $("#select_roomTypes").val() + "/" + $("#modal_noRooms").val(),
+                    type: "GET",
+                    contentType: "application/json",
+                    dataType: "json",
+                    cache: false,
+                    success: function (res) {
+                        console.log("Success removing rooms: " + res);
+                    },
+                    error: function (err) {
+                        console.log("Error: " + err);
+                    }
+                });
             },
             error: function (err) {
                 alert("Error!");
@@ -198,23 +255,35 @@ $(document).ready(function () {
             }
         });
     });
-
-    // helpers
-    function getAmenities(amenities) {
-        var amen = "";
-        var spacer = "&emsp;&bull;&emsp;";
-        $.each(amenities, function (key, val) {
-            amen += val.name + spacer;
-        });
-        return amen.slice(0, -spacer.length);
-    }
-
-    function getStars(hotelRating) {
-        const maxStars = 5;
-        var stars = [];
-        for (let i = 0; i < maxStars; i++) {
-            stars[i] = (i < hotelRating) ? "<span class='fa fa-star checked'></span>" : "<span class='fa fa-star'></span>";
-        }
-        return stars.join("");
-    }
 });
+
+// helpers
+function getAmenities(amenities) {
+    var amen = "";
+    var spacer = "&emsp;&bull;&emsp;";
+    $.each(amenities, function (key, val) {
+        amen += val.name + spacer;
+    });
+    return amen.slice(0, -spacer.length);
+}
+
+function getStars(hotelRating) {
+    const maxStars = 5;
+    var stars = [];
+    for (let i = 0; i < maxStars; i++) {
+        stars[i] = (i < hotelRating) ? "<span class='fa fa-star checked'></span>" : "<span class='fa fa-star'></span>";
+    }
+    return stars.join("");
+}
+
+function reviewCard(val) {
+    return "<div class='row border rounded my-4 mx-1'>" +
+        "<div class='col-10'>" +
+        "<p class='my-4' style='font-size: larger;'>" + val.displayName + "</p>" +
+        "<p class='my-4'>" + val.comments + "</p>" +
+        "</div>" +
+        "<div class='col-2'>" +
+        "<h4 class='my-4'>" + val.overall + "</h4>" +
+        "</div>" +
+        "</div>";
+}

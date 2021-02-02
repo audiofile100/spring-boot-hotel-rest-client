@@ -24,6 +24,7 @@
             <p>My Account</p>
             <p><a href="account" class="btn btn-primary">My Bookings</a></p>
             <p><a href="login?logout" class="btn btn-primary">Logout</a></p>
+            <p><a href="questions" class="btn btn-primary">Questions</a></p>
         </div>
     </div>
     <div class="col-7">
@@ -176,6 +177,26 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal" id="guestModalDone">Done</button>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="hotelReviewsModal">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title">Hotel Reviews</h4>
+            </div>
+
+            <div class="modal-body" id="hotelReviewsModalBody">
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+
         </div>
     </div>
 </div>

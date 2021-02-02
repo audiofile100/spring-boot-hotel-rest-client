@@ -1,6 +1,7 @@
 package com.synergisticit.restclient;
 
 import com.synergisticit.integration.dto.Hotel;
+import com.synergisticit.integration.dto.HotelRoom;
 import com.synergisticit.utilities.RestClientUtilities;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -11,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Component
 public class HotelRestClientImpl implements HotelRestClient {
@@ -39,6 +41,30 @@ public class HotelRestClientImpl implements HotelRestClient {
         HttpEntity<Hotel> requestEntity = new HttpEntity<>(util.getJsonHeaders());
 
         return restTemplate.exchange(HOTEL_URL + id, HttpMethod.GET, requestEntity, Hotel.class);
+    }
+
+    @Override
+    public List<HotelRoom> getHotelRooms(int hotelId) {
+
+        String url = HOTEL_URL + "hotelrooms/" + hotelId;
+
+        return Arrays.asList(Objects.requireNonNull(restTemplate.getForObject(url, HotelRoom[].class)));
+    }
+
+    @Override
+    public List<HotelRoom> removeRooms(int hotelId, int typeId, int noRooms) {
+
+        String url = HOTEL_URL + "removeroom/" + hotelId + "/" + typeId + "/" + noRooms;
+
+        return Arrays.asList(Objects.requireNonNull(restTemplate.getForObject(url, HotelRoom[].class)));
+    }
+
+    @Override
+    public List<HotelRoom> addRooms(int hotelId, int typeId, int noRooms) {
+
+        String url = HOTEL_URL + "addroom/" + hotelId + "/" + typeId + "/" + noRooms;
+
+        return Arrays.asList(Objects.requireNonNull(restTemplate.getForObject(url, HotelRoom[].class)));
     }
 
     private String buildURL(String search) {

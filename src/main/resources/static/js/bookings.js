@@ -25,7 +25,7 @@ $(document).ready(function () {
         var $reviewModalBody = $reviewModal.find("#reviewModalBody");
         $reviewModalBody.empty();
 
-        $reviewModalBody.append(rateCleanliness() + rateService() + rateProperty() + rateAmenities() + rateAtmosphere());
+        $reviewModalBody.append(rateCleanliness() + rateService() + rateProperty() + rateAmenities() + rateAtmosphere() + commentsArea() + displayName());
 
         $reviewModal.modal("toggle");
     });
@@ -38,6 +38,9 @@ $(document).ready(function () {
         var propertyRating = $("input:radio[name=propertyOptions]:checked").val();
         var amenitiesRating = $("input:radio[name=amenitiesOptions]:checked").val();
         var atmosphereRating = $("input:radio[name=atmosphereOptions]:checked").val();
+        var comments = $("#commentsTextArea").val();
+        var displayName = $("#displayName").val();
+        displayName = (displayName.length === 0) ? "anonymous" : displayName;
         var overallRating = (parseInt(cleanlinessRating) + parseInt(serviceRating) + parseInt(propertyRating) + parseInt(amenitiesRating) + parseInt(atmosphereRating)) / 5;
 
         var review = {
@@ -50,7 +53,8 @@ $(document).ready(function () {
             "amenities" : amenitiesRating,
             "atmosphere" : atmosphereRating,
             "overall" : overallRating,
-            "comments" : ""
+            "comments" : comments,
+            "displayName" : displayName
         }
 
         $.ajax({
@@ -96,10 +100,12 @@ function updateBookings() {
                     $canceled.append(bookingRow(val));
                     $canceled.find(".cancelBtn").hide();
                     $canceled.find(".reviewBtn").hide();
+                    addRooms(val);
                 } else {
                     $completed.append(bookingRow(val));
                     $completed.find(".cancelBtn").hide();
                     $completed.find(".reviewBtn").show();
+                    addRooms(val);
                 }
             });
         },
@@ -262,4 +268,32 @@ function rateAtmosphere() {
         "</div>" +
         "</div>" +
         "</div>";
+}
+
+function commentsArea() {
+    return "<div class='row mt-5 mb-1 mx-1'>" +
+        "<textarea class='form-control' id='commentsTextArea' rows='7' placeholder='suggestions/comments...'></textarea>" +
+        "</div>";
+}
+
+function displayName() {
+    return "<div class='row mx-1'>" +
+        "<input class='form-control mt-2' type='text' id='displayName' placeholder='name (optional)' />" +
+        "</div>";
+}
+
+function addRooms(val) {
+    $.ajax({
+        url: "/hotelrooms/add/" + val.hotelId + "/" + val.roomType + "/" + val.totalRooms,
+        type: "GET",
+        contentType: "application/json",
+        dataType: "json",
+        cache: false,
+        success: function (res) {
+            console.log("Success adding rooms: " + res);
+        },
+        error: function (err) {
+            console.log("Error adding rooms: " + err);
+        }
+    });
 }

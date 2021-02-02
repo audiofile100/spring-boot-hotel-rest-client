@@ -2,6 +2,8 @@ package com.synergisticit.integration.dto;
 
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 public class HotelReview {
 
@@ -19,4 +21,5 @@ public class HotelReview {
     private double overall;
 
     private String comments;
+    private String displayName;
 }

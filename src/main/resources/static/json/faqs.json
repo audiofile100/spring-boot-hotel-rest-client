@@ -1,0 +1,37 @@
+[
+  {
+    "faqId" : "1",
+    "question" : "When can I check in to the hotel?",
+    "answer" : "You can check in from 15:00. If you arrive earlier, you can store your baggage in the hotel's baggage area until your room is ready. If the room has been cleaned and is ready before 15:00, you may have access to the room earlier. Please be aware of our additional charge for early check-in."
+  },
+  {
+    "faqId" : "2",
+    "question" : "When do I have to check out of the hotel?",
+    "answer" : "The room is yours until 12:00 on your day of departure. If you wish to check out later than 12:00, please contact reception. Please be aware of our additional charge for late check-out."
+  },
+  {
+    "faqId" : "3",
+    "question" : "What should I do with my room key?",
+    "answer" : "You can leave your room key at reception or put it straight into the designated key box next to reception."
+  },
+  {
+    "faqId" : "4",
+    "question" : "How do I book with a student discount?",
+    "answer" : "You must have a valid booking code. This can be found on the Mecenat website, along with terms and conditions for student discounts. Enter the code in the ‘Add booking code’ field in our booking dialogue."
+  },
+  {
+    "faqId" : "5",
+    "question" : "How do I cancel or make changes to my reservation?",
+    "answer" : "Bookings made on the website can be both changed or cancelled here, click on ‘View booking/Cancellation’. Bookings made via central booking or directly with the hotel cannot be changed/cancelled via the website. Please contact our central booking on telephone number +46 8 517 517 00."
+  },
+  {
+    "faqId" : "6",
+    "question" : "How does check-out work?",
+    "answer" : "The day before your departure (17:00 at the earliest) you receive an SMS text message and/or e-mail message with a link to the online check-out. There you can review your bill, add purchases from the mini-bar, update your address details and pay for your stay. After paying and choosing your check-out time, you are ready."
+  },
+  {
+    "faqId" : "7",
+    "question" : "Which debit/credit cards can I use?",
+    "answer" : "You can pay with the same cards that are accepted at reception; Visa, Mastercard, Amex, Diners, Dankort (Denmark) and JCB."
+  }
+]

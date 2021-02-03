@@ -4,9 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.synergisticit.integration.dto.Customer;
+import com.synergisticit.integration.dto.Faqs;
 import com.synergisticit.integration.dto.Role;
 import com.synergisticit.integration.dto.User;
 import com.synergisticit.service.CustomerService;
+import com.synergisticit.service.FaqsService;
 import com.synergisticit.service.RoleService;
 import com.synergisticit.service.UserService;
 import org.springframework.boot.CommandLineRunner;
@@ -28,12 +30,14 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
     private final UserService userService;
     private final RoleService roleService;
     private final CustomerService customerService;
+    private final FaqsService faqsService;
 
-    public CommandLineRunnerImpl(ResourceLoader resourceLoader, UserService userService, RoleService roleService, CustomerService customerService) {
+    public CommandLineRunnerImpl(ResourceLoader resourceLoader, UserService userService, RoleService roleService, CustomerService customerService, FaqsService faqsService) {
         this.resourceLoader = resourceLoader;
         this.userService = userService;
         this.roleService = roleService;
         this.customerService = customerService;
+        this.faqsService = faqsService;
     }
 
     @Override
@@ -42,6 +46,7 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
         loadData("classpath:static/json/roles.json", "roles");
         loadData("classpath:static/json/users.json", "users");
         loadData("classpath:static/json/customers.json", "customers");
+        loadData("classpath:static/json/faqs.json", "faqs");
     }
 
     private void loadData(String path, String entity) throws Exception {
@@ -53,9 +58,8 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
             byte[] bdata = FileCopyUtils.copyToByteArray(inputStream);
             String data = new String(bdata, StandardCharsets.UTF_8);
 
-            GsonBuilder gsonBuilder = null;
-            Gson gson = null;
-            Type listType = null;
+            Gson gson;
+            Type listType;
 
             switch (entity) {
                 case "roles":
@@ -83,6 +87,15 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
 
                     for (Customer c : customers)
                         customerService.save(c);
+                    break;
+
+                case "faqs":
+                    gson = new Gson();
+                    listType = new TypeToken<List<Faqs>>() {}.getType();
+                    List<Faqs> faqs = gson.fromJson(data, listType);
+
+                    for (Faqs f : faqs)
+                        faqsService.save(f);
                     break;
             }
         } catch (IOException e) {

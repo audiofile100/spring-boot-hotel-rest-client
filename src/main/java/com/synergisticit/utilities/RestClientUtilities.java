@@ -1,6 +1,7 @@
 package com.synergisticit.utilities;
 
 import com.synergisticit.integration.dto.Customer;
+import com.synergisticit.integration.dto.Role;
 import com.synergisticit.integration.dto.User;
 import com.synergisticit.service.CustomerService;
 import com.synergisticit.service.UserService;
@@ -11,6 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Slf4j
 @Component
@@ -34,5 +37,12 @@ public class RestClientUtilities {
         String currentPrincipalName = authentication.getName();
         User u = userService.findByUsername(currentPrincipalName);
         return customerService.findByUser(u);
+    }
+
+    public List<Role> getCurrentUserRoles() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        User u = userService.findByUsername(currentPrincipalName);
+        return u.getRoles();
     }
 }

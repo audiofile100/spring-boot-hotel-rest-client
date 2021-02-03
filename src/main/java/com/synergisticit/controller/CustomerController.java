@@ -5,7 +5,6 @@ import com.synergisticit.utilities.RestClientUtilities;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -23,5 +22,11 @@ public class CustomerController {
     public ResponseEntity<?> getCustomer() {
 
         return new ResponseEntity<>(util.getCurrentCustomer(), HttpStatus.OK);
+    }
+
+    @GetMapping("/api/user/roles")
+    public ResponseEntity<?> getUserRoles() {
+
+        return new ResponseEntity<>(util.getCurrentUserRoles(), HttpStatus.OK);
     }
 }

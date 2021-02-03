@@ -4,6 +4,7 @@ $(document).ready(function () {
     } else {
         $("#account").show();
         localStorage.setItem("cid", $("#cid").val());
+        displayAdminBtn();
     }
 
     $("#searchBtn").click(function () {
@@ -257,7 +258,6 @@ $(document).ready(function () {
     });
 });
 
-// helpers
 function getAmenities(amenities) {
     var amen = "";
     var spacer = "&emsp;&bull;&emsp;";
@@ -286,4 +286,29 @@ function reviewCard(val) {
         "<h4 class='my-4'>" + val.overall + "</h4>" +
         "</div>" +
         "</div>";
+}
+
+function displayAdminBtn() {
+    $.ajax({
+        url: "/api/user/roles/",
+        type: "GET",
+        contentType: "application/json",
+        dataType: "json",
+        cache: false,
+        success: function (res) {
+            var flag = false;
+            $.each(res, function (key, val) {
+                flag = val.role === "admin";
+                if (flag === true) return false;
+            });
+            var $adminBtn = $("#adminBtn");
+            if (flag === false)
+                $adminBtn.hide();
+            else
+                $adminBtn.show();
+        },
+        error: function (err) {
+            console.log("Error: " + err);
+        }
+    });
 }

@@ -39,4 +39,9 @@ public class LoginController {
         model.addAttribute("message", message);
         return "login";
     }
+
+    @GetMapping("/403")
+    public String forbidden() {
+        return "403";
+    }
 }

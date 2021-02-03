@@ -25,6 +25,7 @@
             <p><a href="account" class="btn btn-primary">My Bookings</a></p>
             <p><a href="login?logout" class="btn btn-primary">Logout</a></p>
             <p><a href="questions" class="btn btn-primary">Questions</a></p>
+            <p><a href="admin" class="btn btn-primary" id="adminBtn">Admin</a></p>
         </div>
     </div>
     <div class="col-7">

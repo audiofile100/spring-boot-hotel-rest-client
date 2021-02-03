@@ -141,8 +141,31 @@
 </div>
 
 <div class="container my-5">
-    <label for="questionsTextArea">Questions </label>
+    <label for="questionsTextArea">Complaints </label>
     <textarea class='form-control' id='questionsTextArea' placeholder='' rows='7'></textarea>
+    <input class="btn btn-primary btn-lg my-3" id="submitQuery" type="button" value="Submit"/>
+</div>
+
+<div class="modal" id="confirmationModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Thank you for your submission.</h5>
+            </div>
+
+            <div class="modal-body">
+                <p>We have received your submission.</p>
+                <p>Your ticket id is: </p>
+                <p id="confirmId"></p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Stay</button>
+                <a href="home" class="btn btn-primary">Home</a>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="jumbotron jumbotron-fluid" style="background-color: white"><div class="container"></div></div>

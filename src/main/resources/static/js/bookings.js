@@ -3,7 +3,6 @@ $(document).ready(function () {
     updateBookings();
 
     $(document).on('click', '.cancelBtn', function () {
-        alert("clicked canceled " + ($(this).attr("data-bookingId")));
         $.ajax({
             url: "/booking/" + ($(this).attr("data-bookingId")),
             type: "PUT",

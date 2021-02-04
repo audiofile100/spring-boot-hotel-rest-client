@@ -118,6 +118,7 @@ $(document).ready(function () {
             $myModal.find("#modal_hotelId").val($(this).attr("data-id"));
             $myModal.find("#modal_hotelName").val($(this).attr("data-hotel"));
             $myModal.find("#modal-hotelImg").val($(this).attr("data-hotelImg"));
+            $myModal.find("#modal_hotelPrice").val($(this).attr("data-hotelPrice"));
             $myModal.find("#modal_noGuests").val(parseInt($("#noGuests").val()));
             $myModal.find("#modal_noRooms").val(parseInt($("#noRooms").val()));
             $myModal.find("#modal_checkInDate").val($("#checkInDate").val());
@@ -130,19 +131,21 @@ $(document).ready(function () {
 
         var $myModal = $("#myModal");
 
-        var $roomsAvailable = $("#select_roomTypes").find(":selected").attr("data-rooms");
-        var $roomsRequested = $("#modal_noRooms").val();
+        var $roomsAvailable = parseInt($("#select_roomTypes").find(":selected").attr("data-rooms"));
+        var $roomsRequested = parseInt($("#modal_noRooms").val());
 
         if ($roomsRequested <= $roomsAvailable) {
             $myModal.modal("toggle");
 
             var numGuests = parseInt($("#modal_noGuests").val());
-            numGuests = !isNaN(numGuests) ? numGuests : 1;
+            numGuests = !isNaN(numGuests) ? numGuests : 0;
 
             var $guestModal = $("#guestModal");
 
             var $guestModalForm = $("#guestModalForm");
             $guestModalForm.empty();
+
+            $guestModalForm.append(customerInfo());
 
             for (let i = 0; i < numGuests; i++) {
                 $guestModalForm.append("<div class='row guestRow'>" +
@@ -151,6 +154,7 @@ $(document).ready(function () {
                     "<div class='col'><input type='text' class='form-control mb-2 guestGender' placeholder='Gender'></div>" +
                     "</div>");
             }
+
             $guestModal.modal("toggle");
         } else {
             alert("not enough rooms available");
@@ -162,6 +166,7 @@ $(document).ready(function () {
 
         var booking = {
             "cid" : $("#cid").val(),
+            "bookedOn" : new Date(),
             "checkInDate" : $("#modal_checkInDate").val(),
             "checkOutDate" : $("#modal_checkOutDate").val(),
             "hotelId" : $("#modal_hotelId").val(),
@@ -185,7 +190,7 @@ $(document).ready(function () {
         });
         booking.guestList = guestList;
 
-        //save the booking
+        //save the booking + sendpdf + update room count
         $.ajax({
             url: "/booking",
             type: "POST",
@@ -195,19 +200,9 @@ $(document).ready(function () {
             success: function (data) {
                 console.log(data);
 
-                $.ajax({
-                    url: "/hotelrooms/remove/" + $("#modal_hotelId").val() + "/" +  $("#select_roomTypes").val() + "/" + $("#modal_noRooms").val(),
-                    type: "GET",
-                    contentType: "application/json",
-                    dataType: "json",
-                    cache: false,
-                    success: function (res) {
-                        console.log("Success removing rooms: " + res);
-                    },
-                    error: function (err) {
-                        console.log("Error: " + err);
-                    }
-                });
+                sendPdf(data);
+
+                removeRoomsFromAvailable();
             },
             error: function (err) {
                 alert("Error!");
@@ -306,6 +301,56 @@ function displayAdminBtn() {
                 $adminBtn.hide();
             else
                 $adminBtn.show();
+        },
+        error: function (err) {
+            console.log("Error: " + err);
+        }
+    });
+}
+
+function customerInfo() {
+    return "<div class='row my-3'>" +
+        "<div class='col'>" +
+        "<h6>Verify your contact details</h6>" +
+        "</div>" +
+        "<div class='row'>" +
+        "<div class='col'><input type='text' class='form-control mb-2' id='contactName' placeholder='Name'></div> " +
+        "<div class='col'><input type='text' class='form-control mb-2' id='contactEmail' placeholder='Email'></div>" +
+        "<div class='col'><input type='text' class='form-control mb-2' id='contactPhone' placeholder='Phone'></div>" +
+        "</div>" +
+        "</div>" +
+        "<div class='row'>" +
+        "<div class='col'>" +
+        "<h6>Enter All guest details</h6>" +
+        "</div>" +
+        "</div>";
+}
+
+function removeRoomsFromAvailable() {
+    $.ajax({
+        url: "/hotelrooms/remove/" + $("#modal_hotelId").val() + "/" +  $("#select_roomTypes").val() + "/" + $("#modal_noRooms").val(),
+        type: "GET",
+        contentType: "application/json",
+        dataType: "json",
+        cache: false,
+        success: function (res) {
+            console.log("Success removing rooms: " + res);
+        },
+        error: function (err) {
+            console.log("Error: " + err);
+        }
+    });
+}
+
+function sendPdf(res) {
+    $.ajax({
+        url: "/pdf/" + res.bookingId + "/" + $("#contactEmail").val(),
+        type: "GET",
+        contentType: "application/json",
+        dataType: "json",
+        cache: false,
+        success: function (result) {
+            console.log("Success sending mail.");
         },
         error: function (err) {
             console.log("Error: " + err);

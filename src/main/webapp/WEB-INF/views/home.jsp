@@ -176,7 +176,28 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" id="guestModalDone">Done</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="guestModalDone">Next</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="verifyContactModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title">Verify Your Contact</h4>
+            </div>
+
+            <div class="modal-body" id="verifyContactModalBody">
+                <form id="verifyContactForm">
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="verifyContactDone">Complete Booking</button>
             </div>
         </div>
     </div>

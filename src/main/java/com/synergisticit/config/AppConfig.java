@@ -13,6 +13,8 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -109,5 +111,25 @@ public class AppConfig implements WebMvcConfigurer {
         viewResolver.setViewClass(JstlView.class);
 
         return viewResolver;
+    }
+
+    @Bean
+    public JavaMailSender mailSender() {
+
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost("smtp.gmail.com");
+        mailSender.setPort(587);
+        mailSender.setUsername("fremontsession@gmail.com");
+        mailSender.setPassword("session3!");
+
+        Properties javaMailProperties = new Properties();
+        javaMailProperties.setProperty("mail.transport.protocol", "smtp");
+        javaMailProperties.setProperty("mail.smtp.auth", "true");
+        javaMailProperties.setProperty("mail.debug", "true");
+        javaMailProperties.setProperty("mail.smtp.starttls.enable", "true");
+
+        mailSender.setJavaMailProperties(javaMailProperties);
+
+        return mailSender;
     }
 }

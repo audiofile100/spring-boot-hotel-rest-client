@@ -33,9 +33,15 @@ public class BookingRestClientImpl implements BookingRestClient {
     }
 
     @Override
+    public Booking findById(int bookingId) {
+
+        return restTemplate.getForObject(BOOKING_URL + bookingId, Booking.class);
+    }
+
+    @Override
     public List<Booking> findAllByCid(int cid) {
 
-        return Arrays.asList(Objects.requireNonNull(restTemplate.getForObject(BOOKING_URL + cid, Booking[].class)));
+        return Arrays.asList(Objects.requireNonNull(restTemplate.getForObject(BOOKING_URL + "cid/" + cid, Booking[].class)));
     }
 
     @Override

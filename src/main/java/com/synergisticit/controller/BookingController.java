@@ -24,6 +24,12 @@ public class BookingController {
         return new ResponseEntity<>(restClient.save(booking), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/booking/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getBookingById(@PathVariable int id) {
+
+        return new ResponseEntity<>(restClient.findById(id), HttpStatus.OK);
+    }
+
     @GetMapping(value = "/bookings/{cid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllBookings(@PathVariable int cid) {
 

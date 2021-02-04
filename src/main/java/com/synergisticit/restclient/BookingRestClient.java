@@ -8,6 +8,8 @@ public interface BookingRestClient {
 
     Booking save(Booking booking);
 
+    Booking findById(int bookingId);
+
     List<Booking> findAllByCid(int cid);
 
     void cancelBooking(int bookingId);

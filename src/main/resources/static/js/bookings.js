@@ -1,6 +1,7 @@
 $(document).ready(function () {
 
     updateBookings();
+    updateInbox();
 
     $(document).on('click', '.cancelBtn', function () {
         $.ajax({
@@ -67,6 +68,43 @@ $(document).ready(function () {
             },
             error: function (err) {
                 console.log("Error: " + err);
+            }
+        });
+    });
+
+    $(document).on('click', '.actionsBtn2', function () {
+        var complaintId = $(this).attr("data-complaintId");
+        $("#issueId2").val(complaintId);
+
+        getMessagesForCustomer(complaintId);
+
+        $("#customerActionsModal").modal("toggle");
+    });
+
+    $(document).on('click', '.customerActionSubmitBtn', function () {
+        var $complaintId = $("#issueId2").val();
+        var $customerTextArea = $("#customerTextArea");
+
+        var reqBody = {
+            "complaintId" : $complaintId,
+            "assignmentId" : 0,
+            "response" : $customerTextArea.val()
+        };
+
+        $.ajax({
+            url: "/complaint/" + $complaintId,
+            type: "PUT",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(reqBody),
+            success: function (res) {
+                console.log("Success updating complaint " + res);
+
+                updateInbox();
+                $customerTextArea.empty();
+            },
+            error: function (err) {
+                console.log("Error updating complaint " + err);
             }
         });
     });
@@ -295,4 +333,89 @@ function addRooms(val) {
             console.log("Error adding rooms: " + err);
         }
     });
+}
+
+function updateInbox() {
+    var cid = localStorage.getItem("cid");
+    $.ajax({
+        url: "/complaint/" + cid,
+        type: "GET",
+        contentType: "application/json",
+        dataType: "json",
+        cache: false,
+        success: function (res) {
+
+            var $inbox = $("#inbox");
+            $inbox.empty();
+
+            $.each(res, function (key, val) {
+
+                if (val.status === "open") {
+                    $inbox.append(customerComplaintCard(val));
+                }
+            });
+        },
+        error: function (err) {
+            console.log("Error: " + err);
+        }
+    });
+}
+
+function customerComplaintCard(val) {
+    return "<div class='row border rounded complaintCard' style='padding: 16px;'>" +
+        "<div class='col-4'>" +
+        "<p>Issue #: " + val.complaintId + " </p>" +
+        "<p>Associate Id: " + val.assignedId + "</p>" +
+        "</div>" +
+        "<div class='col-5'>" +
+        "<p>Last update: " + val.raisedOn + "</p>" +
+        "<p>Customer Id: " + val.cid + "</p>" +
+        "</div>" +
+        "<div class='col-3'>" +
+        "<p>Status: " + val.status + "</p>" +
+        "<input class='btn btn-primary actionsBtn2' id='actionBtn2' data-complaintId='" + val.complaintId + "' data-assignedId='" + val.assignedId + "' type='button' value='Actions' />" +
+        "</div>" +
+        "</div>";
+}
+
+function getMessagesForCustomer(complaintId) {
+    $.ajax({
+        url: "/complaint/messages/" + complaintId,
+        type: "GET",
+        contentType: "application/json",
+        dataType: "json",
+        cache: false,
+        success: function (res) {
+            console.log("Success getting messages: " + res);
+
+            displayMessagesForCustomer(res);
+        },
+        error: function (err) {
+            console.log("Error getting messages: " + err);
+        }
+    });
+}
+
+function displayMessagesForCustomer(res) {
+    var $actionsBody2 = $("#actionsBody2");
+    $actionsBody2.empty();
+
+    $.each(res, function (key, val) {
+        $actionsBody2.append(messageView(val));
+    });
+}
+
+function messageView(msg) {
+    var ans = (msg.answer == null) ? "" : msg.answer;
+    return "<div class='container border rounded my-3'>" +
+        "<div class='row my-2'>" +
+        "<p class='mx-1'>" + msg.date + "</p>" +
+        "</div>" +
+        "<div class='row my-2'>" +
+        "<p class='mx-2'>" + msg.query + "</p>" +
+        "</div>" +
+        "<div class='row my-2'>" +
+        "<p class='mx-2'>" + ans + "</p>" +
+        "</div>" +
+        "</div>";
 }

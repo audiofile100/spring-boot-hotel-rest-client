@@ -30,6 +30,9 @@
         <li class="nav-item" role="presentation">
             <a class="nav-link" id="completed-tab" data-toggle="tab" href="#completed" role="tab" aria-controls="completed" aria-selected="false">Completed</a>
         </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="inbox-tab" data-toggle="tab" href="#inbox" role="tab" aria-controls="inbox" aria-selected="false">InBox</a>
+        </li>
     </ul>
 
     <div class="tab-content" id="myTabContent">
@@ -37,10 +40,13 @@
 
         </div>
         <div class="tab-pane fade" id="canceled" role="tabpanel" aria-labelledby="canceled-tab">
-            <p>canceled</p>
+
         </div>
         <div class="tab-pane fade" id="completed" role="tabpanel" aria-labelledby="completed-tab">
-            <p>completed</p>
+
+        </div>
+        <div class="tab-pane fade" id="inbox" role="tabpanel" aria-labelledby="inbox-tab">
+
         </div>
     </div>
 </div>
@@ -60,6 +66,34 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="saveReview">Save</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="customerActionsModal">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Actions</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row" id="assignment2">
+
+                </div>
+                <div class="container" id="actionsBody2">
+
+                </div>
+                <div class="container">
+                    <label class="mt-3" for="customerTextArea">Enter your message:</label>
+                    <textarea class="form-control" rows="7" id="customerTextArea"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer" id="actionsFooter2">
+                <input type="hidden" id="issueId2">
+                <button type="button" class="btn btn-primary customerActionSubmitBtn" data-dismiss="modal">Done</button>
             </div>
 
         </div>

@@ -147,7 +147,14 @@ $(document).ready(function () {
 
             $guestModalForm.append(customerInfo());
 
-            for (let i = 0; i < numGuests; i++) {
+            if (numGuests > 1) {
+                $guestModalForm.append("<div class='row mt-5 mb-3'>" +
+                    "<div class='col'>" +
+                    "<h6>Enter your guest list</h6>" +
+                    "</div>" +
+                    "</div>");
+            }
+            for (let i = 0; i < numGuests-1; i++) {
                 $guestModalForm.append("<div class='row guestRow'>" +
                     "<div class='col'><input type='text' class='form-control mb-2 guestName' placeholder='Name'></div> " +
                     "<div class='col'><input type='text' class='form-control mb-2 guestAge' placeholder='Age'></div>" +
@@ -313,16 +320,11 @@ function customerInfo() {
         "<div class='col'>" +
         "<h6>Verify your contact details</h6>" +
         "</div>" +
+        "</div>" +
         "<div class='row'>" +
-        "<div class='col'><input type='text' class='form-control mb-2' id='contactName' placeholder='Name'></div> " +
-        "<div class='col'><input type='text' class='form-control mb-2' id='contactEmail' placeholder='Email'></div>" +
+        "<div class='col'><input type='text' class='form-control mb-2' id='contactName' placeholder='Name' required></div> " +
+        "<div class='col'><input type='text' class='form-control mb-2' id='contactEmail' placeholder='Email' required></div>" +
         "<div class='col'><input type='text' class='form-control mb-2' id='contactPhone' placeholder='Phone'></div>" +
-        "</div>" +
-        "</div>" +
-        "<div class='row'>" +
-        "<div class='col'>" +
-        "<h6>Enter All guest details</h6>" +
-        "</div>" +
         "</div>";
 }
 

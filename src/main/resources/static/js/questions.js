@@ -9,7 +9,12 @@ $(document).ready(function () {
 
         var complaint = {
             "cid" : cid,
-            "message" : $customerText,
+            "inBox" : [
+                {
+                    "date" : new Date(),
+                    "query" : $customerText
+                }
+            ],
             "raisedOn" : new Date(),
             "status" : "open"
         };

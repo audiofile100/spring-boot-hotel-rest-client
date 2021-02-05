@@ -140,14 +140,14 @@
                     <input class="form-control" type="hidden" id="modal-hotelImg"/>
                     <input class="form-control" type="hidden" id="modal_hotelPrice" />
                     Hotel Name: <input readonly="true" class="form-control" type="text" id="modal_hotelName"/>
-                    No. Guests: <input class="form-control" type="number" id="modal_noGuests"/>
-                    Check-In Date: <input class="form-control" type="date" id="modal_checkInDate"/>
-                    Check-Out Date: <input class="form-control" type="date" id="modal_checkOutDate"/>
+                    No. Guests: <input class="form-control" type="number" id="modal_noGuests" min="1" placeholder="1" />
+                    Check-In Date: <input class="form-control" type="date" id="modal_checkInDate" required />
+                    Check-Out Date: <input class="form-control" type="date" id="modal_checkOutDate" required />
                     Room Type:
                     <select class="form-control" id="select_roomTypes">
                     </select>
-                    No. Rooms: <input class="form-control" type="number" id="modal_noRooms"/>
-                    <input style="margin-top:25px" class="btn btn-searchHotelRooms form-control btn-primary addGuestBtn" type="button" value="Add Guest"/>
+                    No. Rooms: <input class="form-control" type="number" id="modal_noRooms" min="1" placeholder="1" />
+                    <input style="margin-top:25px" class="btn btn-searchHotelRooms form-control btn-primary addGuestBtn" type="button" value="Next"/>
                 </div>
 
             </div>
@@ -176,28 +176,7 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" id="guestModalDone">Next</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal" id="verifyContactModal">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h4 class="modal-title">Verify Your Contact</h4>
-            </div>
-
-            <div class="modal-body" id="verifyContactModalBody">
-                <form id="verifyContactForm">
-
-                </form>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" id="verifyContactDone">Complete Booking</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="guestModalDone">Book Now</button>
             </div>
         </div>
     </div>

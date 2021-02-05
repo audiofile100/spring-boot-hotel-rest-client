@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Entity
@@ -16,7 +17,9 @@ public class Complaint {
 
     private int cid;
 
-    private String message;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Message> inBox;
+
     private LocalDate raisedOn;
     private String status;
 

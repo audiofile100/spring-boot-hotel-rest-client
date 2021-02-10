@@ -248,13 +248,15 @@ $(document).ready(function () {
             }
 
             // filter by star rating
-            flag = false;
-            $.each(selectedRatings, function (index, rating) {
-                flag = ($(this).val() === thisHotelRating);
-                if (flag === true) return false;
-            });
-            if (flag === false) {
-                $(this).hide();
+            if (selectedRatings.length >= 1) {
+                flag = false;
+                $.each(selectedRatings, function (index, rating) {
+                    flag = ($(this).val() === thisHotelRating);
+                    if (flag === true) return false;
+                });
+                if (flag === false) {
+                    $(this).hide();
+                }
             }
         });
     });
